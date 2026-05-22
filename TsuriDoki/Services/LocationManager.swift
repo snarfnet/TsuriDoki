@@ -6,6 +6,7 @@ final class LocationManager: NSObject, ObservableObject {
     private let manager = CLLocationManager()
 
     @Published var location: CLLocationCoordinate2D?
+    @Published var locationUpdateCount: Int = 0
     @Published var authorizationStatus: CLAuthorizationStatus = .notDetermined
 
     override init() {
@@ -28,6 +29,7 @@ extension LocationManager: CLLocationManagerDelegate {
         guard let loc = locations.last else { return }
         Task { @MainActor in
             self.location = loc.coordinate
+            self.locationUpdateCount += 1
         }
     }
 

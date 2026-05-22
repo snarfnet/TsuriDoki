@@ -63,7 +63,7 @@ struct DailyForecast: Identifiable {
     let weatherCode: Int
     let precipitationProbability: Int
     let windSpeedMax: Double
-    let biteScore: Int // AI爆釣スコア 0-100
+    let biteScore: Int // 爆釣スコア 0-100
 
     var weatherIcon: String {
         switch weatherCode {

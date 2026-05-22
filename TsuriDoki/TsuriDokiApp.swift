@@ -12,8 +12,8 @@ struct TsuriDokiApp: App {
                     viewModel.locationManager.requestPermission()
                     await viewModel.loadAll()
                 }
-                .onChange(of: viewModel.locationManager.location) { _, newLoc in
-                    if let loc = newLoc {
+                .onChange(of: viewModel.locationManager.locationUpdateCount) { _, _ in
+                    if let loc = viewModel.locationManager.location {
                         viewModel.updateStation(from: loc)
                         Task { await viewModel.loadAll() }
                     }
