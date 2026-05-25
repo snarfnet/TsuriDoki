@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html><head>
+<meta charset="utf-8">
+<style>
+body { margin: 0; background: #1a1a2e; display: flex; flex-wrap: wrap; gap: 40px; padding: 40px; justify-content: center; }
+.phone { width: 393px; height: 852px; border-radius: 48px; overflow: hidden; background: #f2f2f7; position: relative; font-family: -apple-system, 'Hiragino Sans', sans-serif; }
+.status-bar { height: 54px; display: flex; align-items: center; justify-content: space-between; padding: 14px 28px 0; font-size: 14px; font-weight: 600; background: #f2f2f7; }
+.nav-title { font-size: 34px; font-weight: 800; padding: 8px 20px 12px; background: #f2f2f7; }
+.content { padding: 0 16px; overflow: hidden; height: calc(100% - 54px - 56px - 50px); }
+.tab-bar { position: absolute; bottom: 0; left: 0; right: 0; height: 84px; background: rgba(249,249,249,0.94); backdrop-filter: blur(20px); border-top: 0.5px solid #d1d1d6; display: flex; justify-content: space-around; padding: 6px 0 24px; }
+.tab-item { display: flex; flex-direction: column; align-items: center; gap: 2px; font-size: 10px; color: #8e8e93; }
+.tab-item.active { color: #0a7aff; }
+.tab-icon { font-size: 22px; }
+
+.card { background: rgba(255,255,255,0.82); backdrop-filter: blur(20px); border-radius: 16px; padding: 16px; margin-bottom: 12px; }
+
+.score-circle { width: 120px; height: 120px; border-radius: 50%; border: 12px solid #e5e5ea; position: relative; margin: 0 auto; display: flex; align-items: center; justify-content: center; flex-direction: column; }
+.score-ring { position: absolute; top: -12px; left: -12px; width: 120px; height: 120px; border-radius: 50%; border: 12px solid transparent; border-top-color: #ff3b30; border-right-color: #ff3b30; border-bottom-color: #ff3b30; transform: rotate(-90deg); }
+.score-num { font-size: 40px; font-weight: 800; font-feature-settings: 'tnum'; }
+.score-label { font-size: 12px; font-weight: 700; color: #ff3b30; }
+
+.condition-row { display: flex; gap: 8px; margin-top: 8px; }
+.cond-item { flex: 1; text-align: center; }
+.cond-icon { font-size: 12px; color: #8e8e93; }
+.cond-val { font-size: 13px; font-weight: 700; margin: 2px 0; }
+.cond-lbl { font-size: 10px; color: #8e8e93; }
+
+.section-title { font-size: 13px; color: #8e8e93; margin-bottom: 6px; }
+.headline { font-size: 17px; font-weight: 700; }
+.subhead { font-size: 13px; color: #8e8e93; }
+
+.weather-strip { display: flex; gap: 16px; overflow-x: hidden; }
+.weather-hour { text-align: center; min-width: 40px; }
+.weather-hour .time { font-size: 10px; color: #8e8e93; }
+.weather-hour .icon { font-size: 14px; margin: 4px 0; }
+.weather-hour .temp { font-size: 12px; font-weight: 700; }
+
+.tide-chart { height: 100px; background: linear-gradient(180deg, rgba(10,122,255,0.08) 0%, rgba(10,122,255,0.02) 100%); border-radius: 12px; position: relative; overflow: hidden; margin-top: 8px; }
+.tide-wave { position: absolute; bottom: 0; left: 0; right: 0; height: 60px; }
+
+.period-row { display: flex; align-items: center; gap: 8px; margin: 4px 0; font-size: 12px; }
+.period-dot { width: 8px; height: 8px; border-radius: 50%; }
+.period-dot.major { background: #ff3b30; }
+.period-dot.minor { background: #ff9500; }
+.period-type { font-weight: 700; font-size: 11px; }
+
+/* Screen 2 - Tide Detail */
+.tide-detail-chart { height: 180px; background: linear-gradient(180deg, #e8f4fd 0%, #f2f2f7 100%); border-radius: 16px; position: relative; overflow: hidden; }
+.tide-curve { position: absolute; bottom: 20px; left: 0; right: 0; }
+
+/* Screen 3 - Forecast */
+.forecast-day { display: flex; align-items: center; padding: 12px 0; border-bottom: 0.5px solid #e5e5ea; }
+.forecast-day:last-child { border: none; }
+.forecast-date { width: 60px; }
+.forecast-date .dow { font-size: 14px; font-weight: 600; }
+.forecast-date .date { font-size: 11px; color: #8e8e93; }
+.forecast-score { width: 50px; text-align: center; }
+.forecast-score-num { font-size: 20px; font-weight: 800; }
+.forecast-bar { flex: 1; height: 6px; background: #e5e5ea; border-radius: 3px; margin: 0 12px; overflow: hidden; }
+.forecast-bar-fill { height: 100%; border-radius: 3px; }
+.forecast-weather { width: 40px; text-align: center; font-size: 11px; }
+.forecast-temp { width: 60px; text-align: right; font-size: 13px; }
+
+.accent { color: #0a7aff; }
+</style>
+</head><body>
+
+<!-- Screen 1: Home -->
+<div class="phone">
+  <div class="status-bar"><span>9:41</span><span>5G</span></div>
+  <div class="nav-title">釣りドキ</div>
+  <div class="content">
+    <div class="card" style="text-align:center">
+      <div class="section-title">爆釣スコア</div>
+      <div class="score-circle">
+        <div class="score-ring"></div>
+        <div class="score-num">78</div>
+        <div class="score-label">好調</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div style="display:flex;align-items:center;gap:6px;margin-bottom:8px">
+        <span style="color:#0a7aff">📍</span>
+        <span class="headline">横浜</span>
+        <span style="flex:1"></span>
+        <span style="font-size:20px">☀️</span>
+        <span class="subhead">晴れ</span>
+      </div>
+      <div class="condition-row">
+        <div class="cond-item"><div class="cond-icon">🌡</div><div class="cond-val">24°</div><div class="cond-lbl">気温</div></div>
+        <div class="cond-item"><div class="cond-icon">💨</div><div class="cond-val">3m/s</div><div class="cond-lbl">南西</div></div>
+        <div class="cond-item"><div class="cond-icon">📊</div><div class="cond-val">1013</div><div class="cond-lbl">hPa</div></div>
+        <div class="cond-item"><div class="cond-icon">🌊</div><div class="cond-val">0.5m</div><div class="cond-lbl">波高</div></div>
+      </div>
+      <div class="condition-row" style="margin-top:12px">
+        <div class="cond-item"><div class="cond-icon">🌊</div><div class="cond-val">1.2m</div><div class="cond-lbl">潮位</div></div>
+        <div class="cond-item"><div class="cond-icon">⬆️</div><div class="cond-val">5:23</div><div class="cond-lbl">満潮</div></div>
+        <div class="cond-item"><div class="cond-icon">⬇️</div><div class="cond-val">11:48</div><div class="cond-lbl">干潮</div></div>
+        <div class="cond-item"><div class="cond-icon">⬆️</div><div class="cond-val">17:56</div><div class="cond-lbl">満潮</div></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div style="display:flex;align-items:center;gap:6px;margin-bottom:8px">
+        <span style="font-size:20px">🌓</span>
+        <span class="headline">上弦の月</span>
+        <span style="flex:1"></span>
+        <span class="subhead">ソルナー評価: A</span>
+      </div>
+      <div style="display:flex;gap:12px;font-size:12px;margin-bottom:8px">
+        <span>🌅 5:02</span><span>🌇 18:34</span><span>🌙 12:15</span>
+      </div>
+      <div class="section-title">活性タイム</div>
+      <div class="period-row"><div class="period-dot major"></div><span class="period-type">メジャー</span><span>5:02 - 7:02</span></div>
+      <div class="period-row"><div class="period-dot major"></div><span class="period-type">メジャー</span><span>17:34 - 19:34</span></div>
+      <div class="period-row"><div class="period-dot minor"></div><span class="period-type">マイナー</span><span>12:15 - 13:15</span></div>
+    </div>
+  </div>
+  <div class="tab-bar">
+    <div class="tab-item active"><div class="tab-icon">🐟</div>ホーム</div>
+    <div class="tab-item"><div class="tab-icon">🌊</div>潮汐</div>
+    <div class="tab-item"><div class="tab-icon">📅</div>予報</div>
+    <div class="tab-item"><div class="tab-icon">📍</div>地点</div>
+  </div>
+</div>
+
+<!-- Screen 2: Tide Detail -->
+<div class="phone">
+  <div class="status-bar"><span>9:41</span><span>5G</span></div>
+  <div class="nav-title">潮汐</div>
+  <div class="content">
+    <div class="card">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+        <span class="headline">横浜 — 潮汐グラフ</span>
+        <span class="subhead">大潮</span>
+      </div>
+      <div class="tide-detail-chart">
+        <svg viewBox="0 0 360 160" style="width:100%;height:100%">
+          <defs><linearGradient id="tg" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#0a7aff" stop-opacity="0.3"/><stop offset="100%" stop-color="#0a7aff" stop-opacity="0.02"/></linearGradient></defs>
+          <path d="M0,120 C30,40 60,20 90,30 C120,40 150,110 180,120 C210,130 240,50 270,30 C300,10 330,80 360,120 L360,160 L0,160Z" fill="url(#tg)"/>
+          <path d="M0,120 C30,40 60,20 90,30 C120,40 150,110 180,120 C210,130 240,50 270,30 C300,10 330,80 360,120" fill="none" stroke="#0a7aff" stroke-width="2.5"/>
+          <circle cx="90" cy="30" r="5" fill="#ff3b30"/><text x="90" y="22" text-anchor="middle" fill="#ff3b30" font-size="10" font-weight="700">満潮 5:23</text>
+          <circle cx="180" cy="120" r="5" fill="#0a7aff"/><text x="180" y="138" text-anchor="middle" fill="#0a7aff" font-size="10" font-weight="700">干潮 11:48</text>
+          <circle cx="270" cy="30" r="5" fill="#ff3b30"/><text x="270" y="22" text-anchor="middle" fill="#ff3b30" font-size="10" font-weight="700">満潮 17:56</text>
+          <line x1="160" y1="0" x2="160" y2="160" stroke="#ff9500" stroke-width="1" stroke-dasharray="4,4"/>
+          <text x="162" y="14" fill="#ff9500" font-size="9" font-weight="600">現在</text>
+        </svg>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="headline" style="margin-bottom:8px">潮汐データ</div>
+      <table style="width:100%;font-size:13px;border-collapse:collapse">
+        <tr style="border-bottom:0.5px solid #e5e5ea"><td style="padding:8px 0;color:#ff3b30;font-weight:700">⬆ 満潮</td><td>5:23</td><td style="text-align:right;font-weight:600">168cm</td></tr>
+        <tr style="border-bottom:0.5px solid #e5e5ea"><td style="padding:8px 0;color:#0a7aff;font-weight:700">⬇ 干潮</td><td>11:48</td><td style="text-align:right;font-weight:600">32cm</td></tr>
+        <tr style="border-bottom:0.5px solid #e5e5ea"><td style="padding:8px 0;color:#ff3b30;font-weight:700">⬆ 満潮</td><td>17:56</td><td style="text-align:right;font-weight:600">172cm</td></tr>
+        <tr><td style="padding:8px 0;color:#0a7aff;font-weight:700">⬇ 干潮</td><td>23:42</td><td style="text-align:right;font-weight:600">45cm</td></tr>
+      </table>
+    </div>
+
+    <div class="card">
+      <div class="headline" style="margin-bottom:8px">日出没・月出没</div>
+      <div style="display:flex;gap:16px;font-size:13px">
+        <div>🌅 日の出 <b>5:02</b></div>
+        <div>🌇 日の入 <b>18:34</b></div>
+      </div>
+      <div style="display:flex;gap:16px;font-size:13px;margin-top:6px">
+        <div>🌙 月の出 <b>12:15</b></div>
+        <div>🌑 月の入 <b>0:48</b></div>
+      </div>
+    </div>
+  </div>
+  <div class="tab-bar">
+    <div class="tab-item"><div class="tab-icon">🐟</div>ホーム</div>
+    <div class="tab-item active"><div class="tab-icon">🌊</div>潮汐</div>
+    <div class="tab-item"><div class="tab-icon">📅</div>予報</div>
+    <div class="tab-item"><div class="tab-icon">📍</div>地点</div>
+  </div>
+</div>
+
+<!-- Screen 3: Forecast -->
+<div class="phone">
+  <div class="status-bar"><span>9:41</span><span>5G</span></div>
+  <div class="nav-title">予報</div>
+  <div class="content">
+    <div class="card">
+      <div class="headline" style="margin-bottom:12px">7日間の釣り予報</div>
+      <div class="forecast-day">
+        <div class="forecast-date"><div class="dow" style="color:#ff3b30">今日</div><div class="date">5/26</div></div>
+        <div class="forecast-score"><div class="forecast-score-num" style="color:#ff3b30">78</div></div>
+        <div class="forecast-bar"><div class="forecast-bar-fill" style="width:78%;background:linear-gradient(90deg,#ff9500,#ff3b30)"></div></div>
+        <div class="forecast-weather">☀️</div>
+        <div class="forecast-temp">24° / 18°</div>
+      </div>
+      <div class="forecast-day">
+        <div class="forecast-date"><div class="dow">火</div><div class="date">5/27</div></div>
+        <div class="forecast-score"><div class="forecast-score-num" style="color:#ff9500">65</div></div>
+        <div class="forecast-bar"><div class="forecast-bar-fill" style="width:65%;background:linear-gradient(90deg,#ffcc00,#ff9500)"></div></div>
+        <div class="forecast-weather">⛅</div>
+        <div class="forecast-temp">22° / 17°</div>
+      </div>
+      <div class="forecast-day">
+        <div class="forecast-date"><div class="dow">水</div><div class="date">5/28</div></div>
+        <div class="forecast-score"><div class="forecast-score-num" style="color:#ff9500">72</div></div>
+        <div class="forecast-bar"><div class="forecast-bar-fill" style="width:72%;background:linear-gradient(90deg,#ff9500,#ff3b30)"></div></div>
+        <div class="forecast-weather">☀️</div>
+        <div class="forecast-temp">25° / 19°</div>
+      </div>
+      <div class="forecast-day">
+        <div class="forecast-date"><div class="dow">木</div><div class="date">5/29</div></div>
+        <div class="forecast-score"><div class="forecast-score-num" style="color:#007aff">42</div></div>
+        <div class="forecast-bar"><div class="forecast-bar-fill" style="width:42%;background:linear-gradient(90deg,#007aff,#5ac8fa)"></div></div>
+        <div class="forecast-weather">🌧</div>
+        <div class="forecast-temp">20° / 16°</div>
+      </div>
+      <div class="forecast-day">
+        <div class="forecast-date"><div class="dow">金</div><div class="date">5/30</div></div>
+        <div class="forecast-score"><div class="forecast-score-num" style="color:#ff9500">58</div></div>
+        <div class="forecast-bar"><div class="forecast-bar-fill" style="width:58%;background:linear-gradient(90deg,#ffcc00,#ff9500)"></div></div>
+        <div class="forecast-weather">⛅</div>
+        <div class="forecast-temp">23° / 17°</div>
+      </div>
+      <div class="forecast-day">
+        <div class="forecast-date"><div class="dow" style="color:#007aff">土</div><div class="date">5/31</div></div>
+        <div class="forecast-score"><div class="forecast-score-num" style="color:#ff3b30">85</div></div>
+        <div class="forecast-bar"><div class="forecast-bar-fill" style="width:85%;background:linear-gradient(90deg,#ff9500,#ff3b30)"></div></div>
+        <div class="forecast-weather">☀️</div>
+        <div class="forecast-temp">26° / 20°</div>
+      </div>
+      <div class="forecast-day">
+        <div class="forecast-date"><div class="dow" style="color:#ff3b30">日</div><div class="date">6/1</div></div>
+        <div class="forecast-score"><div class="forecast-score-num" style="color:#ff3b30">82</div></div>
+        <div class="forecast-bar"><div class="forecast-bar-fill" style="width:82%;background:linear-gradient(90deg,#ff9500,#ff3b30)"></div></div>
+        <div class="forecast-weather">☀️</div>
+        <div class="forecast-temp">27° / 21°</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="section-title">時間ごとの天気</div>
+      <div class="weather-strip">
+        <div class="weather-hour"><div class="time">10時</div><div class="icon">☀️</div><div class="temp">22°</div></div>
+        <div class="weather-hour"><div class="time">11時</div><div class="icon">☀️</div><div class="temp">23°</div></div>
+        <div class="weather-hour"><div class="time">12時</div><div class="icon">☀️</div><div class="temp">24°</div></div>
+        <div class="weather-hour"><div class="time">13時</div><div class="icon">⛅</div><div class="temp">24°</div></div>
+        <div class="weather-hour"><div class="time">14時</div><div class="icon">⛅</div><div class="temp">23°</div></div>
+        <div class="weather-hour"><div class="time">15時</div><div class="icon">☀️</div><div class="temp">23°</div></div>
+        <div class="weather-hour"><div class="time">16時</div><div class="icon">☀️</div><div class="temp">22°</div></div>
+        <div class="weather-hour"><div class="time">17時</div><div class="icon">🌅</div><div class="temp">21°</div></div>
+      </div>
+    </div>
+  </div>
+  <div class="tab-bar">
+    <div class="tab-item"><div class="tab-icon">🐟</div>ホーム</div>
+    <div class="tab-item"><div class="tab-icon">🌊</div>潮汐</div>
+    <div class="tab-item active"><div class="tab-icon">📅</div>予報</div>
+    <div class="tab-item"><div class="tab-icon">📍</div>地点</div>
+  </div>
+</div>
+
+<script>
+const p = new URLSearchParams(location.search);
+const s = p.get('screen');
+if (s) {
+  const phones = document.querySelectorAll('.phone');
+  const idx = parseInt(s) - 1;
+  phones.forEach((ph, i) => { ph.style.display = i === idx ? 'block' : 'none'; });
+  document.body.style.padding = '0';
+  document.body.style.gap = '0';
+}
+</script>
+</body></html>
